@@ -6,41 +6,44 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
 public class MyFlowPane extends Application {
+    FlowPane flowPane;
+    Scene scene;
+    Canvas canvas = new Canvas(900, 700);
+    GraphicsContext graphicsContext;
 
     @Override
     public void start(Stage stage){
+        graphicsContext = canvas.getGraphicsContext2D();
+
         MySlider mySlider = new MySlider();
         MyColorPicker myColorPicker = new MyColorPicker();
-        Color color = myColorPicker.colorPicker().getValue();
 
-        FlowPane flowPane = new FlowPane(Orientation.VERTICAL, 10, 10);
-        Canvas canvas = new Canvas(900, 700);
+        flowPane = new FlowPane(Orientation.VERTICAL, 10, 10);
+
         flowPane.getChildren().add(canvas);
         flowPane.getChildren().add(mySlider.slider());
         flowPane.getChildren().add(mySlider.getLabel());
         flowPane.getChildren().add(mySlider.getButton());
-        flowPane.getChildren().add(myColorPicker.colorPicker());
+        flowPane.getChildren().add(myColorPicker.getColorPicker());
 
-        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+        scene = new Scene(flowPane, 1100, 700);
 
-        graphicsContext.setFill(Color.WHITE);
-        graphicsContext.fillRect(0, 0, 1000, 700);
+        scene.setOnMousePressed(e ->{
+            graphicsContext.beginPath();
+            graphicsContext.fillRect(e.getSceneX(), e.getSceneY(), mySlider.slider.getValue(), mySlider.slider.getValue());
+            graphicsContext.stroke();
+        } );
 
         canvas.setOnMouseDragged((event) -> {
-            graphicsContext.setFill(myColorPicker.colorPicker().getValue());
-            graphicsContext.fillRect(event.getX(), event.getY(),mySlider.slider.getValue(), mySlider.slider.getValue());
+            graphicsContext.fillRect(event.getX(), event.getY(), mySlider.slider.getValue(), mySlider.slider.getValue());
+            graphicsContext.setFill(myColorPicker.getColorPicker().getValue());
         });
 
-        stage.setScene(new Scene(flowPane));
+        stage.setScene(scene);
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(MyFlowPane.class);
     }
 }

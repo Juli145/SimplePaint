@@ -16,18 +16,12 @@ public class MySlider extends Application{
     public Slider slider(){
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
-        slider.setBlockIncrement(2.0);
-        slider.setMajorTickUnit(5.0);
-        slider.setMinorTickCount(4);
-        slider.setSnapToTicks(true);
         slider.valueProperty().addListener(new ChangeListener<Number>(){
-
             public void changed(ObservableValue<? extends Number> changed, Number oldValue, Number newValue){
                 lbl.setText("Slider Value: " + newValue);
             }
         });
 
-        slider = new Slider(1.0, 10.0, 5.0);
         btn.setOnAction(event -> lbl.setText("Slider Size: " + slider.getValue()));
         return slider;
     }
@@ -35,11 +29,6 @@ public class MySlider extends Application{
 
     @Override
     public void start(Stage stage) {
-    }
-
-    public static void main(String[] args) {
-
-        Application.launch(args);
     }
 
     public Label getLabel(){

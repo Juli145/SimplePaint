@@ -1,36 +1,26 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class MyColorPicker extends Application {
-    public static void main(String[] args) {
-        launch(args);
-    }
+    ColorPicker colorPicker = new ColorPicker();
 
-    public ColorPicker colorPicker(){
-        ColorPicker colorPicker = new ColorPicker();
-
-        final Color[] color = {colorPicker.getValue()};
-
-        colorPicker.setOnAction(new EventHandler() {
-            public void handle(Event t) {
-                color[0] = colorPicker.getValue();
+    public void colorPicker(){
+        colorPicker.valueProperty().addListener(new ChangeListener<Color>() {
+            @Override public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
+                colorPicker.setValue(newValue);
             }
         });
-
-        VBox vBox = new VBox(colorPicker);
-        //HBox hBox = new HBox(button1, button2);
-        Scene scene = new Scene(vBox, 960, 600);
-        return colorPicker;
     }
 
+    public ColorPicker getColorPicker(){
+        return colorPicker;
+    }
 
     @Override
     public void start(Stage primaryStage) {
